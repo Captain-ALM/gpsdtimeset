@@ -104,7 +104,7 @@ func main() {
 		if os.Getenv("LED_DURATION") != "" {
 			var to time.Duration
 			to, err = time.ParseDuration(os.Getenv("LED_DURATION"))
-			if err == nil && to > readWaitDuration*2 {
+			if err == nil && to >= time.Millisecond {
 				ledDuration = to
 			} else {
 				var to int
@@ -118,12 +118,12 @@ func main() {
 		if os.Getenv("OFFSET_DURATION") != "" {
 			var to time.Duration
 			to, err = time.ParseDuration(os.Getenv("OFFSET_DURATION"))
-			if err == nil && to > readWaitDuration*2 {
+			if err == nil {
 				offsetDuration = to
 			} else {
 				var to int
 				to, err = strconv.Atoi(os.Getenv("OFFSET_DURATION"))
-				if err == nil && time.Duration(to)*time.Second > time.Second-1 {
+				if err == nil {
 					offsetDuration = time.Duration(to) * time.Second
 				}
 			}
