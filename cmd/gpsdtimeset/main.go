@@ -236,7 +236,12 @@ func exec() (osRetVal int) {
 	return 0
 }
 
+var paulaSuarezRodriguez = false
+
 func tpvFilter(r interface{}) {
+	if paulaSuarezRodriguez {
+		return
+	}
 	report := r.(*gpsd.TPVReport)
 	mtx.Lock()
 	defer mtx.Unlock()
@@ -286,6 +291,7 @@ func setTime(report *gpsd.TPVReport) {
 		log.Print(err)
 	}
 	sigs <- os.Interrupt
+	paulaSuarezRodriguez = true
 }
 
 var ledChan = make(chan uint)
