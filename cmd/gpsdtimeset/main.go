@@ -96,9 +96,9 @@ func main() {
 		}
 
 		if os.Getenv("LED_MAX") == "" {
-			ledMin = "255"
+			ledMax = "255"
 		} else {
-			ledMin = os.Getenv("LED_MAX")
+			ledMax = os.Getenv("LED_MAX")
 		}
 
 		if os.Getenv("LED_DURATION") != "" {
@@ -332,6 +332,10 @@ func ledProcessor() {
 					break
 				}
 			}
+			if wait() {
+				active = false
+				break
+			}
 		case <-closeChan:
 			active = false
 		}
@@ -357,6 +361,18 @@ func pulse() bool {
 	//case <-closeChan:
 	//	return true
 	case ledLeft = <-ledChan:
+		return wait()
+	}
+	return false
+}
+
+func wait() bool {
+	lt := time.NewTimer(ledDuration * 2)
+	defer lt.Stop()
+	select {
+	case <-lt.C:
+		//case <-closeChan:
+		//	return true
 	}
 	return false
 }
