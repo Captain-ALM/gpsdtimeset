@@ -326,6 +326,9 @@ func ledProcessor() {
 	for active {
 		select {
 		case ledLeft = <-ledChan:
+			if os.Getenv("DEBUG") == "2" {
+				log.Println(ledLeft, "LED")
+			}
 			for ledLeft > 0 {
 				if pulse() {
 					active = false
@@ -361,6 +364,9 @@ func pulse() bool {
 	//case <-closeChan:
 	//	return true
 	case ledLeft = <-ledChan:
+		if os.Getenv("DEBUG") == "2" {
+			log.Println(ledLeft, "LED")
+		}
 		return wait()
 	}
 	return false
