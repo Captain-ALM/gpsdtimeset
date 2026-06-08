@@ -309,7 +309,7 @@ func setTime(report *gpsd.TPVReport) {
 	paulaSuarezRodriguez = true
 }
 
-var ledChan = make(chan uint, 1)
+var ledChan = make(chan uint)
 var ledLeft uint = 0
 var ledActiveChan = make(chan struct{})
 
@@ -375,10 +375,19 @@ func pulse() bool {
 func wait() bool {
 	lt := time.NewTimer(ledDuration * 2)
 	defer lt.Stop()
-	select {
-	case <-lt.C:
+	loop := true
+	for loop {
+		select {
+		case <-lt.C:
+			loop = false
 		//case <-closeChan:
 		//	return true
+		case ledLeft = <-ledChan:
+			if os.Getenv("DEBUG") == "2" {
+				log.Println(ledLeft, "LED")
+			}
+		}
 	}
+
 	return false
 }
