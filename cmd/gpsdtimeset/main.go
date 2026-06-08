@@ -37,15 +37,16 @@ var readWaitDuration = time.Duration(0)
 var ledMin string
 var ledMax string
 var ledDuration = time.Second
+var offsetDuration = time.Duration(0)
 
 func main() {
 	log.Printf("%s #%s (%s) : (C) Captain ALM 2026 : BSD 3-Clause License\n", buildName, buildVersion, buildDate)
 	if len(os.Args) < 2 {
-		fmt.Println("\nUsage:\n" + buildName + " <msg|messages|led|led-end-on|led-end-off> [read wait duration] [endpoint]")
+		fmt.Println("\nUsage:\n" + buildName + " <msg|message|messages|led|led-end-on|led-end-off> [read wait duration] [endpoint]")
 		os.Exit(1)
 	} else {
 		switch strings.ToLower(os.Args[1]) {
-		case "msg", "messages":
+		case "msg", "message", "messages":
 			mode = Message
 		case "led", "led-end-on":
 			mode = LedEndOn
@@ -110,6 +111,20 @@ func main() {
 				to, err = strconv.Atoi(os.Getenv("LED_DURATION"))
 				if err == nil && time.Duration(to)*time.Millisecond > time.Millisecond-1 {
 					ledDuration = time.Duration(to) * time.Millisecond
+				}
+			}
+		}
+
+		if os.Getenv("OFFSET_DURATION") != "" {
+			var to time.Duration
+			to, err = time.ParseDuration(os.Getenv("OFFSET_DURATION"))
+			if err == nil && to > readWaitDuration*2 {
+				offsetDuration = to
+			} else {
+				var to int
+				to, err = strconv.Atoi(os.Getenv("OFFSET_DURATION"))
+				if err == nil && time.Duration(to)*time.Second > time.Second-1 {
+					offsetDuration = time.Duration(to) * time.Second
 				}
 			}
 		}
@@ -281,7 +296,7 @@ func setTime(report *gpsd.TPVReport) {
 	if os.Getenv("DEBUG") == "1" {
 		log.Println(lastTime, report, "APPLYING")
 	}
-	err := utils.SetTime(report.Time)
+	err := utils.SetTime(report.Time.Add(offsetDuration))
 	if err != nil {
 		if mode == Message {
 			fmt.Println("FAILED")
@@ -331,6 +346,7 @@ func ledProcessor() {
 func pulse() bool {
 	lt := time.NewTimer(ledDuration)
 	defer lt.Stop()
+	defer func() { ledLeft -= 1 }()
 	if ledLeft%2 == 0 {
 		fmt.Println(ledMin)
 	} else {
