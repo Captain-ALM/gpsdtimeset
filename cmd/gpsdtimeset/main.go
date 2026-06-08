@@ -309,7 +309,7 @@ func setTime(report *gpsd.TPVReport) {
 	paulaSuarezRodriguez = true
 }
 
-var ledChan = make(chan uint)
+var ledChan = make(chan uint, 1)
 var ledLeft uint = 0
 var ledActiveChan = make(chan struct{})
 
