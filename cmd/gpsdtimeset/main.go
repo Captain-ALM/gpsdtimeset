@@ -37,7 +37,7 @@ var readWaitDuration = time.Duration(0)
 var ledMin string
 var ledMax string
 var ledDuration = time.Second
-var ledIdleDuration = time.Second * 2
+var ledIdleDuration = time.Second * 5
 var offsetDuration = time.Duration(0)
 
 func main() {
