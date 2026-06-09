@@ -1,0 +1,15 @@
+# GPSD Time Set Service (%i LED via bash)
+[Unit]
+Description=GPSD Time Set Service (%i LED via bash) (End Off)
+
+[Service]
+WorkingDirectory=/etc
+ExecStart=/usr/bin/bash -c "/usr/local/bin/gpsdtimeset led-end-off 5m > /sys/class/leds/%i/brightness"
+User=root
+Group=root
+Type=simple
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

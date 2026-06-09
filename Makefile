@@ -14,7 +14,7 @@ ifeq ($(OS),Windows_NT)
 	BIN := $(BIN).exe
 endif
 
-.PHONY: build dev test clean deploy
+.PHONY: build dev test clean deploy setup
 
 build:
 	mkdir -p dist/
@@ -35,3 +35,9 @@ clean:
 deploy: build
 	sudo mkdir -p /usr/local/bin
 	sudo cp "${BIN}" /usr/local/bin
+
+setup:
+	sudo cp gpsdtimeset.service /etc/systemd/system/gpsdtimeset.service
+	sudo cp gpsdtimeset_led@.service /etc/systemd/system/gpsdtimeset_led@.service
+	sudo cp gpsdtimeset_led_end_off@.service /etc/systemd/system/gpsdtimeset_led_end_off@.service
+	sudo systemctl daemon-reload

@@ -1,0 +1,15 @@
+# GPSD Time Set Service
+[Unit]
+Description=GPSD Time Set Service
+
+[Service]
+WorkingDirectory=/etc
+ExecStart=/usr/local/bin/gpsdtimeset msg 5m
+User=root
+Group=root
+Type=simple
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
