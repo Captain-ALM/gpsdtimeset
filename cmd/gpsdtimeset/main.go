@@ -37,6 +37,7 @@ var readWaitDuration = time.Duration(0)
 var ledMin string
 var ledMax string
 var ledDuration = time.Second
+var ledIdleDuration = time.Second * 2
 var offsetDuration = time.Duration(0)
 
 func main() {
@@ -111,6 +112,20 @@ func main() {
 				to, err = strconv.Atoi(os.Getenv("LED_DURATION"))
 				if err == nil && time.Duration(to)*time.Millisecond > time.Millisecond-1 {
 					ledDuration = time.Duration(to) * time.Millisecond
+				}
+			}
+		}
+
+		if os.Getenv("LED_IDLE_DURATION") != "" {
+			var to time.Duration
+			to, err = time.ParseDuration(os.Getenv("LED_IDLE_DURATION"))
+			if err == nil && to >= time.Millisecond {
+				ledIdleDuration = to
+			} else {
+				var to int
+				to, err = strconv.Atoi(os.Getenv("LED_IDLE_DURATION"))
+				if err == nil && time.Duration(to)*time.Millisecond > time.Millisecond-1 {
+					ledIdleDuration = time.Duration(to) * time.Millisecond
 				}
 			}
 		}
@@ -321,27 +336,54 @@ func blink(halfs uint) {
 	}
 }
 
+var infinChan = make(chan time.Time)
+
+func chanOrInfin(t *time.Ticker) <-chan time.Time {
+	if t == nil {
+		return infinChan
+	} else {
+		return t.C
+	}
+}
+
 func ledProcessor() {
+	var lt *time.Ticker
+	if ledIdleDuration > 0 {
+		lt = time.NewTicker(ledIdleDuration)
+	}
+	defer lt.Stop()
 	defer close(ledActiveChan)
 	active := true
+	ledMode := true
 	for active {
 		select {
 		case ledLeft = <-ledChan:
 			if os.Getenv("DEBUG") == "2" {
 				log.Println(ledLeft, "LED")
 			}
-			for ledLeft > 0 {
-				if pulse() {
-					active = false
-					break
-				}
-			}
-			if wait() {
-				active = false
-				break
-			}
+		case <-chanOrInfin(lt):
 		case <-closeChan:
 			active = false
+		}
+		if active {
+			if ledLeft > 0 {
+				for ledLeft > 0 {
+					if pulse() {
+						active = false
+						break
+					}
+				}
+				if wait() {
+					active = false
+				}
+			} else {
+				if ledMode {
+					fmt.Println(ledMin)
+				} else {
+					fmt.Println(ledMax)
+				}
+				ledMode = !ledMode
+			}
 		}
 	}
 	if mode == LedEndOn {
