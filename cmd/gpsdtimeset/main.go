@@ -69,11 +69,7 @@ func main() {
 			var to time.Duration
 			to, err = time.ParseDuration(os.Getenv("TIMEOUT"))
 			if err == nil {
-				if to > readWaitDuration*2 {
-					timeout = to
-				} else {
-					timeout = readWaitDuration * 2
-				}
+				timeout = to
 			} else {
 				var to int
 				to, err = strconv.Atoi(os.Getenv("TIMEOUT"))
@@ -81,10 +77,10 @@ func main() {
 					if time.Duration(to)*time.Millisecond > readWaitDuration*2 {
 						timeout = time.Duration(to) * time.Millisecond
 					} else {
-						timeout = readWaitDuration * 2
+						timeout = 0
 					}
 				} else {
-					timeout = readWaitDuration * 2
+					timeout = 0
 				}
 			}
 		} else {
