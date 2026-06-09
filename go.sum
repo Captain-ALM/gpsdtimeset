@@ -1,8 +1,8 @@
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
-golang.captainalm.com/go-gpsd v1.3.2 h1:g3pYzC3uMvDlPA/wBkegAq1aaBMvwy99lm5j5PImXBA=
-golang.captainalm.com/go-gpsd v1.3.2/go.mod h1:nVf/vTgfYxOMxiQdy9BtJjojbFRtG8H3wNula++VgkU=
-golang.captainalm.com/gpsdmon v1.1.2 h1:C5HRZJ+PjKfECffY//tmybCuvGxVo0V6OSs10RekARw=
-golang.captainalm.com/gpsdmon v1.1.2/go.mod h1:ab89zR4F5Hb99acwF+JKS+VJnUbu+I3BJ3+EPxdSZ3M=
+golang.captainalm.com/go-gpsd v1.3.3 h1:bOsNZcWvzexYDo/sslHMXWqZqBkME3UP3zYlrV2yZW4=
+golang.captainalm.com/go-gpsd v1.3.3/go.mod h1:nVf/vTgfYxOMxiQdy9BtJjojbFRtG8H3wNula++VgkU=
+golang.captainalm.com/gpsdmon v1.1.3 h1:jvCMxzgWh2HcbF/zHFmg/jqNBIyPxnHsCjnIPazPil8=
+golang.captainalm.com/gpsdmon v1.1.3/go.mod h1:CFD9r1KDyDorXtEadSLBgWeRxVKl298VHpjmCJ2AgWQ=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
