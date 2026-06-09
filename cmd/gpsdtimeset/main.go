@@ -261,6 +261,7 @@ func tpvFilter(r interface{}) {
 	mtx.Lock()
 	defer mtx.Unlock()
 	if report.Time.Before(gpsdstruct.GPSMinTime) {
+		lastTime = time.Time{}
 		if os.Getenv("DEBUG") == "1" {
 			log.Println(lastTime, report, "Less Than GPS Time")
 		}
