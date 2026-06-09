@@ -1,6 +1,7 @@
 # GPSD Time Set Service
 [Unit]
 Description=GPSD Time Set Service
+Requires=gpsd.socket
 
 [Service]
 WorkingDirectory=/etc

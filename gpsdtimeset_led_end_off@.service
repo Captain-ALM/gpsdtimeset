@@ -1,6 +1,7 @@
 # GPSD Time Set Service (%i LED via bash)
 [Unit]
 Description=GPSD Time Set Service (%i LED via bash) (End Off)
+Requires=gpsd.socket
 
 [Service]
 WorkingDirectory=/etc
